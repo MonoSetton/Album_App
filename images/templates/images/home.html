@@ -1,3 +1,7 @@
+
+{% extends 'base.html' %}
+{% block content %}
+
 {% for image in images %}
     <img src="{{ image.image.url }}">
     {% for cat in image.category.all %}
@@ -9,3 +13,6 @@
 {% for category in categories %}
     {{ category }} <br>
 {% endfor %}
+
+
+{% endblock %}

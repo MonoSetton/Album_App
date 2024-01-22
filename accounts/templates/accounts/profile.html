@@ -1,3 +1,15 @@
-user - {{ request.user }} <br>
-username - {{ request.user.username }}<br>
-email -  {{ request.user.email }}
+{% extends 'base.html' %}
+{% block content %}
+
+user - {{ user.username }} <br>
+username - {{ user.username }}<br>
+email -  {{ user.email }}
+
+
+{{ user }}
+
+<a href="{% url 'update_username' %}">Update Username</a>
+<a href="{% url 'update_email' %}">Update Email</a> <br>
+
+<a href="{% url 'reset_password' %}">Reset password</a>
+{% endblock %}
