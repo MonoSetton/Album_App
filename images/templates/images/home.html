@@ -3,17 +3,22 @@
 {% block content %}
 
 {% for image in images %}
+{{ image.name }}
     <img src="{{ image.image.url }}">
     {% for cat in image.category.all %}
       {{ cat }}
     {% endfor %}
-
+    <a href="{% url 'delete_image' image.id %}">Delete Image</a>
+    <br>
+--------------
+<br>
 {% endfor %}
-----------
+************
 <br>
 {% for category in categories %}
     {{ category }} <br>
 {% endfor %}
 
+<a href="{% url 'upload_image' %}">Upload Image</a>
 
 {% endblock %}
