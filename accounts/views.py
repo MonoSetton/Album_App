@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm, UpdateUsername, UpdateEmail
 from django.contrib.auth.models import User
@@ -18,12 +18,19 @@ def sign_up(request):
     return render(request, 'registration/signup.html', {'form': form})
 
 
+def logout_view(request):
+    logout(request)
+    return redirect('/')
+
+
+@login_required(login_url='/login')
 def profile(request):
     user = request.user
     context = {'user': user}
     return render(request, 'accounts/profile.html', context)
 
 
+@login_required(login_url='/login')
 def update_username(request):
     user = request.user
     if request.method == 'POST':
@@ -37,6 +44,7 @@ def update_username(request):
     return render(request, 'accounts/update_username.html', {'form': form})
 
 
+@login_required(login_url='/login')
 def update_email(request):
     user = request.user
     if request.method == 'POST':
