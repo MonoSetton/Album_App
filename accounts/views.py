@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import RegisterForm, UpdateUsername, UpdateEmail
+from .forms import RegisterForm, UpdateUsername, UpdateEmail, ChangePasswordForm
 from django.contrib.auth.models import User
-
+from django.contrib.auth import authenticate
 
 def sign_up(request):
     if request.method == 'POST':
@@ -21,6 +21,31 @@ def sign_up(request):
 def logout_view(request):
     logout(request)
     return redirect('/')
+
+
+def change_password(request):
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.POST)
+        if form.is_valid():
+            newpassword = form.cleaned_data['newpassword1']
+            username = request.user.username
+            password = form.cleaned_data['oldpassword']
+
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                user.set_password(newpassword)
+                user.save()
+                return redirect('/')
+            else:
+                context = {'error': 'You have entered wrong old password', 'form': form}
+                return render(request, 'accounts/change_password.html', context)
+        else:
+            context = {'error': 'You have entered old password', 'form': form}
+            return render(request, 'accounts/change_password.html', context)
+    else:
+        form = ChangePasswordForm()
+    context = {'form': form}
+    return render(request, 'accounts/change_password.html', context)
 
 
 @login_required(login_url='/login')
