@@ -28,8 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://foodapp-production-11037.up.railway.app',
-    'https://foodapp-production-11037.up.railway.app',
+    'http://albumapp-production.up.railway.app',
+    'https://albumapp-production.up.railway.app',
 ]
 
 # Application definition
