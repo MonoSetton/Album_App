@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm, UpdateUsername, UpdateEmail, ChangePasswordForm
 from django.contrib.auth import authenticate
-
+from images.models import Image
 
 def sign_up(request):
     if request.method == 'POST':
@@ -51,7 +51,8 @@ def change_password(request):
 @login_required(login_url='/login')
 def profile(request):
     user = request.user
-    context = {'user': user}
+    images = Image.objects.filter(author=request.user)
+    context = {'user': user, 'images': images}
     return render(request, 'accounts/profile.html', context)
 
 

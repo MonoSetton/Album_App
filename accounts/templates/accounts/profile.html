@@ -1,16 +1,44 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <h2 class="text-center mb-4">User Profile</h2>
 
-user - {{ user.username }} <br>
-username - {{ user.username }}<br>
-email -  {{ user.email }}
+      <!-- Username Section -->
+      <div class="mb-3">
+        <label for="username" class="form-label">Username:</label>
+        <p class="form-control-plaintext" id="username">{{ user.username }}</p>
+      </div>
+
+      <!-- Email Section -->
+      <div class="mb-3">
+        <label for="email" class="form-label">Email:</label>
+        <p class="form-control-plaintext" id="email">{{ user.email }}</p>
+      </div>
+
+      <!-- Buttons Section -->
+      <div class="mb-4">
+        <div class="btn-group" role="group">
+          <a href="{% url 'update_username' %}"><button type="button" class="btn btn-primary m-1">Update Username</button></a>
+          <a href="{% url 'update_email' %}"><button type="button" class="btn btn-primary m-1">Update Email</button></a>
+          <a href="{% url 'change_password' %}"><button type="button" class="btn btn-primary m-1">Change Password</button></a>
+        </div>
+      </div>
+
+      <div class="image-section row row-cols-1 row-cols-md-2 g-3">
+        <!-- Use a loop to dynamically add images -->
+        {% for image in images %}
+        <div class="col">
+          <img src="{{ image.image.url }}" class="w-100 m-1 rounded-3">
+        </div>
+        {% endfor %}
+        <!-- Add more images as needed in the loop -->
+      </div>
+
+    </div>
+  </div>
+</div>
 
 
-{{ user }}
-<br>
-<a href="{% url 'update_username' %}">Update Username</a> <br>
-<a href="{% url 'update_email' %}">Update Email</a> <br>
-
-<a href="{% url 'change_password' %}">Change Password</a> <br>
-<a href="{% url 'reset_password' %}">Reset password</a>
 {% endblock %}
