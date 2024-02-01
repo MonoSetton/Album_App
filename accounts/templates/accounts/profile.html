@@ -23,13 +23,29 @@
         </div>
       </div>
 
-      <div class="image-section row row-cols-1 row-cols-md-2 g-3">
+          <div class="row row-cols-1 row-cols-md-4 g-3 image-section">
         {% for image in images %}
-        <div class="card shadow-sm">
-            <img src="{{ image.image.url }}" class="img-fluid">
+        <div class="col-lg-6 mb-4">
+          <div class="card shadow-sm h-100">
+            <img src="{{ image.image.url }}" class="img-fluid" style="max-height: 150px; /* Adjust this value as needed */
+            width: 100%;
+            object-fit: cover;" data-bs-toggle="modal" data-bs-target="#imageModal{{ forloop.counter }}">
             <div class="card-body">
                 <i>{{ image.name }}</i>
                 <div class="d-flex justify-content-between align-items-center">
+                    <div class="modal fade" id="imageModal{{ forloop.counter }}" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="imageModalLabel">Image Preview</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <img src="{{ image.image.url }}" class="img-fluid" alt="Image">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 <div class="btn-group">
                     <p>
                         Categories:
@@ -37,14 +53,16 @@
                         {{ cat }}
                         {% endfor %}
                     </p>
-                  <a href="{% url 'delete_image' image.id %}">
+                    <a href="{% url 'delete_image' image.id %}">
                       <button type="button" class="btn btn-sm btn-outline-secondary">Delete Image</button>
                   </a>
                 </div>
               </div>
             </div>
           </div>
+        </div>
         {% endfor %}
+      </div>
       </div>
 
     </div>
