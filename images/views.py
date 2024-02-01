@@ -3,13 +3,18 @@ from .models import Image, Category
 from django.contrib.auth.decorators import login_required
 from .forms import ImageUploadForm
 from django.core.exceptions import BadRequest
+from .filters import ImageFilter
 
 
 @login_required(login_url='/login')
 def home(request):
     images = Image.objects.all()
     categories = Category.objects.all()
-    context = {'images': images, 'categories': categories}
+
+    search_filter = ImageFilter(request.GET, queryset=images)
+    images = search_filter.qs
+
+    context = {'images': images, 'categories': categories, 'search_filter': search_filter}
     return render(request, 'images/home.html', context)
 
 
