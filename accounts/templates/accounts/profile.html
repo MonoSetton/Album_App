@@ -5,20 +5,16 @@
   <div class="row">
     <div class="col-md-6 offset-md-3">
       <h2 class="text-center mb-4">User Profile</h2>
-
-      <!-- Username Section -->
       <div class="mb-3">
         <label for="username" class="form-label">Username:</label>
         <p class="form-control-plaintext" id="username">{{ user.username }}</p>
       </div>
 
-      <!-- Email Section -->
       <div class="mb-3">
         <label for="email" class="form-label">Email:</label>
         <p class="form-control-plaintext" id="email">{{ user.email }}</p>
       </div>
 
-      <!-- Buttons Section -->
       <div class="mb-4">
         <div class="btn-group" role="group">
           <a href="{% url 'update_username' %}"><button type="button" class="btn btn-primary m-1">Update Username</button></a>
@@ -28,13 +24,27 @@
       </div>
 
       <div class="image-section row row-cols-1 row-cols-md-2 g-3">
-        <!-- Use a loop to dynamically add images -->
         {% for image in images %}
-        <div class="col">
-          <img src="{{ image.image.url }}" class="w-100 m-1 rounded-3">
-        </div>
+        <div class="card shadow-sm">
+            <img src="{{ image.image.url }}" class="img-fluid">
+            <div class="card-body">
+                <i>{{ image.name }}</i>
+                <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                    <p>
+                        Categories:
+                        {% for cat in image.category.all %}
+                        {{ cat }}
+                        {% endfor %}
+                    </p>
+                  <a href="{% url 'delete_image' image.id %}">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">Delete Image</button>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
         {% endfor %}
-        <!-- Add more images as needed in the loop -->
       </div>
 
     </div>
