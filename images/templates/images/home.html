@@ -14,7 +14,7 @@
         {% for image in images %}
         <div class="col-lg-3 col-md-6">
           <div class="card shadow-sm h-100">
-            <img src="{{ image.image.url }}" class="img-fluid" style="max-height: 150px; /* Adjust this value as needed */
+            <img src="{{ image.image.url }}" class="img-fluid" style="max-height: 350px; /* Adjust this value as needed */
             width: 100%;
             object-fit: cover;" data-bs-toggle="modal" data-bs-target="#imageModal{{ forloop.counter }}">
             <div class="card-body">
