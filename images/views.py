@@ -38,7 +38,7 @@ def delete_image(request, pk):
     if image.author == request.user:
         if request.method == 'POST':
             image.delete()
-            return redirect('/')
+            return redirect('/profile')
         context = {'image': image}
         return render(request, 'images/delete_image.html', context)
     else:

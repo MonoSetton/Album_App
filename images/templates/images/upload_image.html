@@ -2,9 +2,14 @@
 {% block title %}Upload Image{% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
+<div class="container mt-4">
+    <h2>Upload Image</h2>
+    <p>Upload an image using the form below:</p>
+
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|crispy }}
-        <button type="submit" class="btn btn-info">Upload Image</button>
+        <button type="submit" class="btn btn-outline-dark">Upload Image</button>
     </form>
+</div>
 {% endblock %}

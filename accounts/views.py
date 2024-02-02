@@ -5,6 +5,7 @@ from .forms import RegisterForm, UpdateUsername, UpdateEmail, ChangePasswordForm
 from django.contrib.auth import authenticate
 from images.models import Image
 
+
 def sign_up(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -64,7 +65,7 @@ def update_username(request):
         form = UpdateUsername(request.POST, instance=user)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('/profile')
     else:
         form = UpdateUsername()
 
@@ -78,7 +79,7 @@ def update_email(request):
         form = UpdateEmail(request.POST, instance=user)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('/profile')
     else:
         form = UpdateEmail()
 

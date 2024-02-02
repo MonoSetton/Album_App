@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 
-
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
@@ -13,6 +12,8 @@ class RegisterForm(UserCreationForm):
 
 
 class UpdateUsername(UserChangeForm):
+    password = None
+
     class Meta:
         model = User
         fields = ['username']
@@ -20,6 +21,7 @@ class UpdateUsername(UserChangeForm):
 
 class UpdateEmail(UserChangeForm):
     email = forms.EmailField(required=True)
+    password = None
 
     class Meta:
         model = User
@@ -27,9 +29,12 @@ class UpdateEmail(UserChangeForm):
 
 
 class ChangePasswordForm(forms.Form):
-    oldpassword = forms.CharField(max_length = 20, widget=forms.TextInput(attrs={'type':'password', 'placeholder':'your old Password',  'class' : 'span'}))
-    newpassword1 = forms.CharField(max_length = 20, widget=forms.TextInput(attrs={'type':'password', 'placeholder':'New Password',  'class' : 'span'}))
-    newpassword2 = forms.CharField(max_length = 20, widget=forms.TextInput(attrs={'type':'password', 'placeholder':'Confirm New Password',  'class' : 'span'}))
+    oldpassword = forms.CharField(max_length = 20, widget=forms.TextInput(
+        attrs={'type':'password', 'placeholder': 'Your old Password', 'class': 'span'}))
+    newpassword1 = forms.CharField(max_length = 20, widget=forms.TextInput(
+        attrs={'type':'password', 'placeholder': 'New Password', 'class': 'span'}))
+    newpassword2 = forms.CharField(max_length = 20, widget=forms.TextInput(
+        attrs={'type':'password', 'placeholder': 'Confirm New Password', 'class': 'span'}))
 
     def clean(self):
         if 'newpassword1' in self.cleaned_data and 'newpassword2' in self.cleaned_data:

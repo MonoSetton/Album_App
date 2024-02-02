@@ -2,12 +2,24 @@
 {% block title %}Delete Image{% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <p>Are you sure you want to delete "{{ image.name }}"?</p>
 
-    <form action="{% url 'delete_image' image.id %}" method="post">
-        {% csrf_token %}
-        <input type="submit" class="btn btn-secondary" value="Yes">
-    </form>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2>Delete Image</h2>
+            <p>Are you sure you want to delete the image: {{ image.name }}?</p>
 
-    <a href="{% url 'home' %}"><button class="btn btn-info">Cancel</button></a>
+            <form action="{% url 'delete_image' image.id %}" method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <input type="hidden" name="image_id" value="{{ image.id }}">
+                </div>
+
+                <button type="submit" class="btn btn-danger">Delete Image</button>
+                <a href="{% url 'home' %}" class="btn btn-outline-dark">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
