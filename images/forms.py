@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from .models import Image, Category
+from .models import Image, Category, Comment
 
 
 class ImageUploadForm(ModelForm):
@@ -12,3 +12,9 @@ class ImageUploadForm(ModelForm):
         queryset=Category.objects.all(),
         widget=forms.CheckboxSelectMultiple
     )
+
+
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['body']

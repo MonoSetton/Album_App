@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
-from .models import Image, Category
 from django.contrib.auth.decorators import login_required
-from .forms import ImageUploadForm
-from django.core.exceptions import BadRequest
 from .filters import ImageFilter
+from django.core.exceptions import BadRequest
+from .models import Image, Category, Comment
+from .forms import ImageUploadForm, CommentForm
 
 
 @login_required(login_url='/login')
@@ -14,7 +14,9 @@ def home(request):
     search_filter = ImageFilter(request.GET, queryset=images)
     images = search_filter.qs
 
-    context = {'images': images, 'categories': categories, 'search_filter': search_filter}
+    form = CommentForm
+
+    context = {'images': images, 'categories': categories, 'search_filter': search_filter, 'form': form}
     return render(request, 'images/home.html', context)
 
 
@@ -43,3 +45,22 @@ def delete_image(request, pk):
         return render(request, 'images/delete_image.html', context)
     else:
         raise BadRequest("You do not have permission to see this site")
+
+
+def add_comment(request, pk):
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.image = Image.objects.get(id=pk)
+            form.save()
+            return redirect('/')
+
+
+def delete_comment(request, pk):
+    comment = Comment.objects.get(id=pk)
+    if request.method == 'POST':
+        comment.delete()
+        return redirect('/')
+
