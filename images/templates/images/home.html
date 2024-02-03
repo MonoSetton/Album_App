@@ -46,6 +46,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <h6>Comments:</h6>
+                                    <div id="comments-section>">
                                         {% for comment in image.comments.all %}
                                             <li>{{ comment }}</li>
                                             {% if user == comment.author %}
@@ -55,11 +56,12 @@
                                                 </form>
                                             {% endif %}
                                         {% endfor %}
-
-                                    <form method="post" action="{% url 'add_comment' image.id %}">
-                                        {% csrf_token %}
-                                        {{ form|crispy }}
-                                        <button type="submit" class="btn btn-primary">Add Comment</button>
+                                    </div>
+                                        <form class="comment-form" method="post" action="{% url 'add_comment' image.id %}">
+                                            {% csrf_token %}
+                                            {{ form|crispy }}
+                                            <button type="submit" class="btn btn-primary">Add Comment</button>
+                                        </form>
                                     </form>
                                 </div>
                             </div>
@@ -71,4 +73,36 @@
     </div>
 </div>
 
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Submit comment form via AJAX
+        $('form.comment-form').submit(function (event) {
+            event.preventDefault();
+
+            var form = $(this);
+            var formData = new FormData(form[0]);
+
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    // Append the new comment to the comments section
+                    $('.comments-section').append('<li>' + data.body + ' - ' + data.author + '</li>');
+
+                    // Clear the form after successful submission
+                    form.trigger('reset');
+                },
+                error: function (error) {
+                    console.error('Error submitting comment:', error);
+                }
+            });
+        });
+    });
+</script>
 {% endblock %}

@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import BadRequest
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from .models import Image, Category, Comment
 from .filters import ImageFilter
 from .forms import ImageUploadForm, CommentForm
@@ -55,7 +56,12 @@ def add_comment(request, pk):
             comment.author = request.user
             comment.image = Image.objects.get(id=pk)
             form.save()
-            return redirect('/')
+
+            # Return a JSON response with the new comment data
+            data = {'body': comment.body, 'author': comment.author.username}
+            return JsonResponse(data, safe=False)
+
+    return JsonResponse({'error': 'Invalid form submission'})
 
 
 def delete_comment(request, pk):
