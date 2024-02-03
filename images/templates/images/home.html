@@ -46,7 +46,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <h6>Comments:</h6>
-                                    <div id="comments-section>">
+                                    <div id="comments-section-{{ image.id }}">
                                         {% for comment in image.comments.all %}
                                             <li>{{ comment }}</li>
                                             {% if user == comment.author %}
@@ -57,11 +57,10 @@
                                             {% endif %}
                                         {% endfor %}
                                     </div>
-                                        <form class="comment-form" method="post" action="{% url 'add_comment' image.id %}">
-                                            {% csrf_token %}
-                                            {{ form|crispy }}
-                                            <button type="submit" class="btn btn-primary">Add Comment</button>
-                                        </form>
+                                    <form class="comment-form" data-section-id="{{ image.id }}" method="post" action="{% url 'add_comment' image.id %}">
+                                        {% csrf_token %}
+                                        {{ form|crispy }}
+                                        <button type="submit" class="btn btn-primary">Add Comment</button>
                                     </form>
                                 </div>
                             </div>
@@ -84,6 +83,7 @@
 
             var form = $(this);
             var formData = new FormData(form[0]);
+            var sectionId = form.data('section-id');  // Retrieve the section ID
 
             $.ajax({
                 type: form.attr('method'),
@@ -92,8 +92,8 @@
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                    // Append the new comment to the comments section
-                    $('.comments-section').append('<li>' + data.body + ' - ' + data.author + '</li>');
+                    // Append the new comment to the correct comments section
+                    $('#comments-section-' + sectionId).append('<li>' + data.body + '</li>');
 
                     // Clear the form after successful submission
                     form.trigger('reset');
