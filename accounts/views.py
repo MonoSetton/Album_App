@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import RegisterForm, UpdateUsername, UpdateEmail, ChangePasswordForm
+from django.contrib.auth import login, logout
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate
+from .forms import RegisterForm, UpdateUsername, UpdateEmail, ChangePasswordForm
 from images.models import Image
 
 
