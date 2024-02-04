@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 {% block title %}Home{% endblock %}
 {% load crispy_forms_tags %}
+{% load static %}
 {% block content %}
+
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
 
 <div class="container mt-4">
     <h2>Home Page</h2> <br />
@@ -45,23 +48,26 @@
                                     <img src="{{ image.image.url }}" class="img-fluid" alt="{{ image.name }}">
                                 </div>
                                 <div class="col-md-4">
-                                    <h6>Comments:</h6>
-                                    <div id="comments-section-{{ image.id }}">
-                                        {% for comment in image.comments.all %}
-                                            <li>{{ comment }}</li>
-                                            {% if user == comment.author %}
-                                                <form method="post" action="{% url 'delete_comment' comment.id %}">
-                                                    {% csrf_token %}
-                                                    <button type="submit" class="btn btn-primary">Delete Comment</button>
-                                                </form>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
                                     <form class="comment-form" data-section-id="{{ image.id }}" method="post" action="{% url 'add_comment' image.id %}">
                                         {% csrf_token %}
                                         {{ form|crispy }}
-                                        <button type="submit" class="btn btn-primary">Add Comment</button>
+                                        <button type="submit" class="btn btn-outline-dark">Add Comment</button>
                                     </form>
+                                    <h6>Comments:</h6>
+                                    <div id="comments-section-{{ image.id }}" class="comments-section">
+                                        {% for comment in image.comments.all %}
+                                            <div id="comment-{{ comment.id }}" class="comment">
+                                                <span class="comment-author">{{ comment.author.username }}</span>
+                                                <p class="comment-body">{{ comment.body }}</p>
+                                                {% if user == comment.author %}
+                                                    <form class="delete-comment-form" action="{% url 'delete_comment' comment.id %}" method="post">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-danger btn-sm delete-comment">Delete</button>
+                                                    </form>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -75,34 +81,6 @@
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-<script>
-    $(document).ready(function () {
-        // Submit comment form via AJAX
-        $('form.comment-form').submit(function (event) {
-            event.preventDefault();
+<script src="{% static 'javascript/home.js' %}"></script>
 
-            var form = $(this);
-            var formData = new FormData(form[0]);
-            var sectionId = form.data('section-id');  // Retrieve the section ID
-
-            $.ajax({
-                type: form.attr('method'),
-                url: form.attr('action'),
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (data) {
-                    // Append the new comment to the correct comments section
-                    $('#comments-section-' + sectionId).append('<li>' + data.body + '</li>');
-
-                    // Clear the form after successful submission
-                    form.trigger('reset');
-                },
-                error: function (error) {
-                    console.error('Error submitting comment:', error);
-                }
-            });
-        });
-    });
-</script>
 {% endblock %}
