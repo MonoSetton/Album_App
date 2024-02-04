@@ -58,7 +58,7 @@ def add_comment(request, pk):
             form.save()
 
             # Return a JSON response with the new comment data
-            data = {'body': comment.body, 'author': comment.author.username}
+            data = {'id': comment.id, 'body': comment.body, 'author': comment.author.username}
             return JsonResponse(data, safe=False)
 
     return JsonResponse({'error': 'Invalid form submission'})
