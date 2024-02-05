@@ -12,7 +12,6 @@ class Category(models.Model):
 class Image(models.Model):
     name = models.CharField(max_length=50)
     image = models.ImageField(null=False, blank=False)
-    likes = models.IntegerField(default=0)
     category = models.ManyToManyField(Category)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
