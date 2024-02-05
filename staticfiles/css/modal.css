@@ -1,0 +1,21 @@
+.comment {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.comment-author {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.comment-body {
+    margin-top: 5px;
+}
+.modal-lg {
+    max-width: 80%;
+}
+textarea {
+    height: 100px;
+    resize: none;
+}

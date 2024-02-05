@@ -3,6 +3,7 @@ from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate
 from .forms import RegisterForm, UpdateUsername, UpdateEmail, ChangePasswordForm
+from images.forms import CommentForm
 from images.models import Image
 
 
@@ -54,7 +55,8 @@ def change_password(request):
 def profile(request):
     user = request.user
     images = Image.objects.filter(author=request.user)
-    context = {'user': user, 'images': images}
+    form = CommentForm
+    context = {'user': user, 'images': images, 'form': form}
     return render(request, 'accounts/profile.html', context)
 
 

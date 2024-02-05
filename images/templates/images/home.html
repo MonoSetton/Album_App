@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 {% block title %}Home{% endblock %}
-{% load crispy_forms_tags %}
 {% load static %}
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/modal.css' %}">
 
 <div class="container mt-4">
     <h2>Home Page</h2> <br />
@@ -16,64 +15,11 @@
 
     <div class="row row-cols-1 row-cols-md-4 g-4">
         {% for image in images %}
-            <div class="col mb-4">
-                <div class="card h-100">
-                    <div class="overflow-hidden" style="max-height: 300px;">
-                        <img src="{{ image.image.url }}" class="card-img-top" alt="{{ image.name }}"
-                             data-bs-toggle="modal" data-bs-target="#imageModal{{ forloop.counter }}">
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{ image.name }}</h5>
-                        <p class="card-text">
-                        <h5>Categories:</h5>
-                            {% for category in image.category.all %}
-                                {{ category }}
-                            {% endfor %}
-                        </p>
-                    </div>
-                </div>
-            </div>
+            <!-- Image card -->
+            {% include 'image_card.html' %}
 
             <!-- Modals -->
-            <div class="modal fade" id="imageModal{{ forloop.counter }}" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="imageModalLabel">{{ image.name }} - Full Scale</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <img src="{{ image.image.url }}" class="img-fluid" alt="{{ image.name }}">
-                                </div>
-                                <div class="col-md-4">
-                                    <form class="comment-form" data-section-id="{{ image.id }}" method="post" action="{% url 'add_comment' image.id %}">
-                                        {% csrf_token %}
-                                        {{ form|crispy }}
-                                        <button type="submit" class="btn btn-outline-dark">Add Comment</button>
-                                    </form>
-                                    <h6>Comments:</h6>
-                                    <div id="comments-section-{{ image.id }}" class="comments-section">
-                                        {% for comment in image.comments.all %}
-                                            <div id="comment-{{ comment.id }}" class="comment">
-                                                <span class="comment-author">{{ comment.author.username }}</span>
-                                                <p class="comment-body">{{ comment.body }}</p>
-                                                {% if user == comment.author %}
-                                                    <form class="delete-comment-form" action="{% url 'delete_comment' comment.id %}" method="post">
-                                                        {% csrf_token %}
-                                                        <button type="submit" class="btn btn-danger btn-sm delete-comment">Delete</button>
-                                                    </form>
-                                                {% endif %}
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% include 'modal.html' %}
         {% endfor %}
     </div>
 </div>

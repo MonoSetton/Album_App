@@ -15,11 +15,17 @@ $(document).ready(function () {
             contentType: false,
             success: function (data) {
                 // Append the new comment to the correct comments section
-                var commentHtml = '<li id="comment-' + data.id + '">' +
-                    data.body + ' - ' + data.author +
-                    '<button class="btn btn-danger btn-sm delete-comment" data-comment-id="' + data.id + '">Delete</button>' +
-                    '</li>';
+                var commentHtml = '<div id="comment-' + data.id + '" class="comment">' +
+                    '<span class="comment-author">' + data.author + '</span>' +
+                    '<p class="comment-body">' + data.body + '</p>';
+                    console.log(data, data.id)
+                    commentHtml += '<form class="delete-comment-form" action="/delete_comment/0'.replace('0', data.id) + '" method="post">' +
+                        '<button type="submit" class="btn btn-danger btn-sm delete-comment">Delete</button>' +
+                        '</form>';
 
+
+                // Close the comment div
+                commentHtml += '</div>';
                 $('#comments-section-' + sectionId).append(commentHtml);
 
                 // Clear the form after successful submission

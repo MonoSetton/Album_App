@@ -1,9 +1,0 @@
-.modal-lg {
-    max-width: 80%;
-}
-
-/* Adjust the height and other properties as needed */
-textarea {
-    height: 100px;
-    resize: none; /* Disable textarea resizing if necessary */
-}
