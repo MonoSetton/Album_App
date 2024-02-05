@@ -1,0 +1,23 @@
+<div class="col mb-4">
+    <div class="card h-100">
+        <div class="overflow-hidden" style="max-height: 300px;">
+            <img src="{{ image.image.url }}" class="card-img-top" alt="{{ image.name }}"
+                 data-bs-toggle="modal" data-bs-target="#imageModal{{ forloop.counter }}">
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{ image.name }}</h5>
+            <p class="card-text">
+                Categories:
+                {% for category in image.category.all %}
+                    {{ category }}
+                {% endfor %}
+            </p>
+            {% if user == image.author %}
+                <form method="post" action="{% url 'delete_image' image.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-dark">Delete image</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
