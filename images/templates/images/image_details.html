@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Upload Image{% endblock %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/modal.css' %}">
+
+
+<div class="row">
+    <div class="col-md-8">
+        <img src="{{ image.image.url }}" class="img-fluid" alt="{{ image.name }}">
+    </div>
+    <div class="col-md-4">
+        <form class="comment-form" data-section-id="{{ image.id }}" method="post" action="{% url 'add_comment' image.id %}">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-outline-dark">Add Comment</button>
+        </form>
+        <h6>Comments:</h6>
+        <div id="comments-section-{{ image.id }}" class="comments-section">
+            {% for comment in image.comments.all %}
+                <div id="comment-{{ comment.id }}" class="comment">
+                    <span class="comment-author">{{ comment.author.username }}</span>
+                    <p class="comment-body">{{ comment.body }}</p>
+                    {% if user == comment.author %}
+                        <form class="delete-comment-form" action="{% url 'delete_comment' comment.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm delete-comment">Delete</button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script src="{% static 'javascript/home.js' %}"></script>
+{% endblock %}
