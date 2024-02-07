@@ -48,6 +48,15 @@ def delete_image(request, pk):
         raise BadRequest("You do not have permission to see this site")
 
 
+def image_details(request, pk):
+    image = Image.objects.get(id=pk)
+
+    form = CommentForm
+
+    context = {'image': image, 'form': form}
+    return render(request, 'images/image_details.html', context)
+
+
 def add_comment(request, pk):
     if request.method == 'POST':
         form = CommentForm(request.POST)
@@ -57,7 +66,6 @@ def add_comment(request, pk):
             comment.image = Image.objects.get(id=pk)
             form.save()
 
-            # Return a JSON response with the new comment data
             data = {'id': comment.id, 'body': comment.body, 'author': comment.author.username}
             return JsonResponse(data, safe=False)
 
