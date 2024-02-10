@@ -31,7 +31,7 @@
 
 <script>
 function ShareURL(id) {
-    var url = window.location.href + 'image_details/' + id
+    var url = 'https://albumapp-production.up.railway.app/' + 'image_details/' + id
     navigator.clipboard.writeText(url);
     setTimeout(SuccessMessage, 300)
 }
