@@ -13,10 +13,9 @@
                 {% endfor %}
             </p>
             {% if user == image.author %}
-                <form method="post" action="{% url 'delete_image' image.id %}">
-                    {% csrf_token %}
+                <a href="{% url 'delete_image' image.id %}">
                     <button type="submit" class="btn btn-outline-dark">Delete image</button>
-                </form>
+                </a>
             {% endif %}
         </div>
     </div>

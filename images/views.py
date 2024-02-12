@@ -78,3 +78,4 @@ def delete_comment(request, pk):
         comment.delete()
         return redirect('/')
 
+
