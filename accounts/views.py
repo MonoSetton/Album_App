@@ -5,8 +5,10 @@ from django.contrib.auth import authenticate
 from .forms import RegisterForm, UpdateUsername, UpdateEmail, ChangePasswordForm
 from images.forms import CommentForm
 from images.models import Image
+from .decorators import unauthenticated_user
 
 
+@unauthenticated_user
 def sign_up(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
