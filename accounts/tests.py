@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
 from django.contrib.auth.models import User
-from .views import sign_up, logout_view
+from .views import sign_up, logout_view, profile, update_username, update_email, change_password
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
@@ -19,10 +19,10 @@ class AccountsUrlsTestCase(TestCase):
         self.profile_url = reverse('profile')
         self.update_username_url = reverse('update_username')
         self.update_email_url = reverse('update_email')
-        self.reset_password_url = reverse('reset_password')
-        self.password_reset_done_url = reverse('password_reset_done')
-        self.password_reset_confirm_url = reverse('password_reset_confirm', args=[self.uidb64, self.token])
-        self.password_reset_complete_url = reverse('password_reset_complete')
+        # self.reset_password_url = reverse('reset_password')
+        # self.password_reset_done_url = reverse('password_reset_done')
+        # self.password_reset_confirm_url = reverse('password_reset_confirm', args=[self.uidb64, self.token])
+        # self.password_reset_complete_url = reverse('password_reset_complete')
         self.change_password_url = reverse('change_password')
 
     def test_signup_url(self):
@@ -30,3 +30,18 @@ class AccountsUrlsTestCase(TestCase):
 
     def test_logout_url(self):
         self.assertEqual(resolve(self.logout_url).func, logout_view)
+
+    def test_profile_url(self):
+        self.assertEqual(resolve(self.profile_url).func, profile)
+
+    def test_update_username_url(self):
+        self.assertEqual(resolve(self.update_username_url).func, update_username)
+
+    def test_update_email_url(self):
+        self.assertEqual(resolve(self.update_email_url).func, update_email)
+
+    def test_change_password_url(self):
+        self.assertEqual(resolve(self.logout_url).func, change_password)
+
+
+
