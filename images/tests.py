@@ -5,6 +5,9 @@ from .views import home, upload_image, delete_image, image_details, add_comment,
 from .models import Category, Image, Comment
 from .forms import ImageUploadForm, CommentForm
 from django.http import JsonResponse
+from django.core.files.uploadedfile import SimpleUploadedFile
+from io import BytesIO
+from PIL import Image as Img
 
 
 class ImagesUrlsTestCase(TestCase):
@@ -63,13 +66,51 @@ class ImagesFormsTestCase(TestCase):
         self.category1 = Category.objects.create(name='Category 1')
         self.category2 = Category.objects.create(name='Category 2')
 
-    def test_comment_form(self):
+    def test_comment_valid_form(self):
         form_data = {
             'body': 'Test Comment'
         }
         form = CommentForm(data=form_data)
 
         self.assertTrue(form.is_valid())
+
+    def test_comment_invalid_form(self):
+        form_data = {
+            'body': ''
+        }
+        form = CommentForm(data=form_data)
+
+        self.assertFalse(form.is_valid())
+
+    def test_image_upload_form_valid_form(self):
+        f = BytesIO()
+        image = Img.new("RGB", (100, 100))
+        image.save(f, 'png')
+        f.seek(0)
+        test_image = SimpleUploadedFile(
+            "test_image.png",
+            content=f.read(),
+        )
+
+        form_data = {
+            'name': 'Test Upload Image',
+            'category': [self.category1.id, self.category2.id]
+        }
+
+        form = ImageUploadForm(data=form_data, files={'image': test_image})
+
+        self.assertTrue(form.is_valid())
+
+    def test_image_upload_form_invalid_form(self):
+        form_data = {
+            'name': 'Test Upload Image',
+            'image': None,
+            'category': [self.category1.id, self.category2.id]
+        }
+
+        form = ImageUploadForm(data=form_data)
+
+        self.assertFalse(form.is_valid())
 
 
 class ImagesViewsTestCase(TestCase):
@@ -101,14 +142,50 @@ class ImagesViewsTestCase(TestCase):
         self.assertIn('form', response.context)
         self.assertTemplateUsed('images/home.html')
 
-    # def test_upload_image_post(self):
-    #     self.client.login(username='testuser', password='password123')
-    #     response = self.client.post(reverse('upload_image'), format='multipart')
-    #
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertTrue(Image.objects.filter(name='Test Upload Image').exists())
-    #     self.assertTrue(Image.objects.filter(name='Test Upload Image')[0].author == self.user)
+    def test_upload_image_post_valid_form(self):
+        self.client.login(username='testuser', password='password123')
+        f = BytesIO()
+        image = Img.new("RGB", (100, 100))
+        image.save(f, 'png')
+        f.seek(0)
+        test_image = SimpleUploadedFile(
+            "test_image.png",
+            content=f.read(),
+        )
 
+        form_data = {
+            'name': 'Test Upload Image',
+            'image': test_image,
+            'category': [self.category1.id, self.category2.id]
+        }
+
+        response = self.client.post(self.upload_image_url, form_data, format='multipart', follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(Image.objects.filter(name='Test Upload Image').exists())
+        self.assertTrue(Image.objects.filter(name='Test Upload Image')[0].author == self.user)
+
+    def test_upload_image_post_invalid_form(self):
+        self.client.login(username='testuser', password='password123')
+        f = BytesIO()
+        image = Img.new("RGB", (100, 100))
+        image.save(f, 'png')
+        f.seek(0)
+        test_image = SimpleUploadedFile(
+            "test_image.png",
+            content=f.read(),
+        )
+
+        form_data = {
+            'name': 'Test Upload Image',
+            'image': test_image,
+            'category': []
+        }
+
+        response = self.client.post(self.upload_image_url, form_data, format='multipart', follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(Image.objects.filter(name='Test Upload Image').exists())
 
     def test_upload_image_get(self):
         self.client.login(username='testuser', password='password123')

@@ -30,23 +30,16 @@ def logout_view(request):
 @login_required(login_url='/login')
 def change_password(request):
     if request.method == 'POST':
-        form = ChangePasswordForm(request.POST)
+        form = ChangePasswordForm(request.POST, request=request)
         if form.is_valid():
             newpassword = form.cleaned_data['newpassword1']
             username = request.user.username
             password = form.cleaned_data['oldpassword']
 
             user = authenticate(username=username, password=password)
-            if user is not None:
-                user.set_password(newpassword)
-                user.save()
-                return redirect('/')
-            else:
-                context = {'error': 'You have entered wrong old password', 'form': form}
-                return render(request, 'accounts/change_password.html', context)
-        else:
-            context = {'error': 'You have entered old password', 'form': form}
-            return render(request, 'accounts/change_password.html', context)
+            user.set_password(newpassword)
+            user.save()
+            return redirect('/')
     else:
         form = ChangePasswordForm()
     context = {'form': form}
