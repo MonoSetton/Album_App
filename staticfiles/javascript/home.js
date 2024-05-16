@@ -51,20 +51,19 @@ $(document).ready(function () {
         return csrfToken;
 }
 
-
-    // Delete comment via AJAX
+    // Delete comment
     $(document).on('submit', '.delete-comment-form', function (event) {
         event.preventDefault();
 
         var form = $(this);
-        var commentId = form.attr('action').split('/').pop(); // Extract comment ID from the form action URL
-        var csrfToken = getCSRFToken(); // Get the CSRF token from the cookie
+        var commentId = form.attr('action').split('/').pop();
+        var csrfToken = getCSRFToken();
 
         $.ajax({
             type: form.attr('method'),
             url: form.attr('action'),
             data: {'comment_id': commentId},
-            headers: {'X-CSRFToken': csrfToken},  // Include the CSRF token in the request headers
+            headers: {'X-CSRFToken': csrfToken},
             success: function () {
                 // Remove the deleted comment from the comments section
                 $('#comment-' + commentId).remove();
