@@ -1,11 +1,10 @@
 $(document).ready(function () {
-    // Submit comment form via AJAX
     $('form.comment-form').submit(function (event) {
         event.preventDefault();
 
         var form = $(this);
         var formData = new FormData(form[0]);
-        var sectionId = form.data('section-id');  // Retrieve the section ID
+        var sectionId = form.data('section-id');
 
         $.ajax({
             type: form.attr('method'),
@@ -14,7 +13,7 @@ $(document).ready(function () {
             processData: false,
             contentType: false,
             success: function (data) {
-                // Append the new comment to the correct comments section
+                // Append the new comment to the comments section
                 var commentHtml = '<div id="comment-' + data.id + '" class="comment">' +
                     '<span class="comment-author">' + data.author + '</span>' +
                     '<p class="comment-body">' + data.body + '</p>';
