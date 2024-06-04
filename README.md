@@ -1,4 +1,4 @@
-Hosted Here ----> https://albumapp-production.up.railway.app
+Hosted Here ----> https://albumapp.up.railway.app
 
 # **Image Album**
 
