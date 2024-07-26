@@ -7,7 +7,6 @@ from .filters import ImageFilter
 from .forms import ImageUploadForm, CommentForm
 
 
-@login_required(login_url='/login')
 def home(request):
     images = Image.objects.all()
     categories = Category.objects.all()
@@ -57,6 +56,7 @@ def image_details(request, pk):
     return render(request, 'images/image_details.html', context)
 
 
+@login_required(login_url='/login')
 def add_comment(request, pk):
     if request.method == 'POST':
         form = CommentForm(request.POST)
@@ -72,6 +72,7 @@ def add_comment(request, pk):
     return JsonResponse({'error': 'Invalid form submission'})
 
 
+@login_required(login_url='/login')
 def delete_comment(request, pk):
     comment = Comment.objects.get(id=pk)
     if request.method == 'POST':

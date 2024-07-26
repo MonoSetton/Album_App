@@ -15,11 +15,13 @@
                         <img src="{{ image.image.url }}" class="img-fluid" alt="{{ image.name }}">
                     </div>
                     <div class="col-md-4">
-                        <form class="comment-form" data-section-id="{{ image.id }}" method="post" action="{% url 'add_comment' image.id %}">
-                            {% csrf_token %}
-                            {{ form|crispy }}
-                            <button type="submit" class="btn btn-outline-dark">Add Comment</button>
-                        </form>
+                        {% if user.is_authenticated %}
+                            <form class="comment-form" data-section-id="{{ image.id }}" method="post" action="{% url 'add_comment' image.id %}">
+                                {% csrf_token %}
+                                {{ form|crispy }}
+                                <button type="submit" class="btn btn-outline-dark">Add Comment</button>
+                            </form>
+                        {% endif %}
                         <h6>Comments:</h6>
                         <div id="comments-section-{{ image.id }}" class="comments-section">
                             {% for comment in image.comments.all %}
